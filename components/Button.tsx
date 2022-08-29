@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
 export const Button = styled.button`
   padding: 12px 20px;
@@ -20,10 +20,9 @@ export const Button = styled.button`
 
   &:hover {
     background: #0053ba;
-}
+  }
 
-
-&:active {
+  &:active {
     transform: scale(0.99);
-}
-`
+  }
+`;

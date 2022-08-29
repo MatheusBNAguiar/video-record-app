@@ -1,36 +1,33 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import { useEffect, useRef } from 'react'
-import { Button } from '../components/Button'
-import { ContentContainer } from '../components/ContentContainer'
-import { DeviceSelector } from '../modules/VideoRecorder/components/DeviceSelector'
-import { getSharedScreenStream, getVideoStream } from '../modules/VideoRecorder/helpers/MediaDevices.helpers'
-import { useInputDevices } from '../modules/VideoRecorder/hooks/useInputDevices'
-import styles from '../styles/Home.module.css'
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import { useEffect, useRef } from 'react';
+import { Button } from '../components/Button';
+import { ContentContainer } from '../components/ContentContainer';
+import { DeviceSelector } from '../modules/VideoRecorder/components/DeviceSelector';
+import { getSharedScreenStream, getVideoStream } from '../modules/VideoRecorder/helpers/MediaDevices.helpers';
+import { useInputDevices } from '../modules/VideoRecorder/hooks/useInputDevices';
+import styles from '../styles/Home.module.css';
 
-export default function Home(){
-  const {inputDevices, selectedVideoId,
-    selectedAudioId,
-    onAudioSelected,
-    onVideoSelected} =  useInputDevices()
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const secondaryVideoRef = useRef<HTMLVideoElement>(null)
+export default function Home() {
+  const { inputDevices, onAudioSelected, onVideoSelected } = useInputDevices();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const secondaryVideoRef = useRef<HTMLVideoElement>(null);
 
-  useEffect(()=>{
-    getVideoStream(`067a8716623b3c997653c774648f34da438008219c25da564bc26a8cbd3bfa9c`).then((stream=>{
-      if(videoRef.current){
-        videoRef.current.play()
+  useEffect(() => {
+    getVideoStream(`067a8716623b3c997653c774648f34da438008219c25da564bc26a8cbd3bfa9c`).then(stream => {
+      if (videoRef.current) {
+        videoRef.current.play();
         videoRef.current.srcObject = stream;
       }
-    }))
-    getSharedScreenStream().then((stream=>{
-      if(secondaryVideoRef.current){
-        secondaryVideoRef.current.play()
+    });
+    getSharedScreenStream().then(stream => {
+      if (secondaryVideoRef.current) {
+        secondaryVideoRef.current.play();
         secondaryVideoRef.current.srcObject = stream;
       }
-    }))
-  },[])
+    });
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -43,7 +40,8 @@ export default function Home(){
         <div>
           <Button>Add bubble screen</Button>
         </div>
-        <DeviceSelector inputDevices={inputDevices}
+        <DeviceSelector
+          inputDevices={inputDevices}
           onAudioSelected={onAudioSelected}
           onVideoSelected={onVideoSelected}
         />
@@ -55,7 +53,6 @@ export default function Home(){
           <Button>Download</Button>
         </div>
       </ContentContainer>
-
     </div>
-  )
+  );
 }
