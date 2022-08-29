@@ -2,54 +2,32 @@ import { useEffect, useMemo, useState } from "react";
 
 type DeviceSelectState = 'idle' | 'permission-requested' | 'permission-denied'
 
-type InputDevices ={audio: MediaDeviceInfo[], video: MediaDeviceInfo[]}
+export type InputDevices ={audio: MediaDeviceInfo[], video: MediaDeviceInfo[]}
 
 export function useInputDevices(){
-  const [inputDevices, setInputDevices] = useState<InputDevices>()
-  
+  const [inputDevices, setInputDevices] = useState<InputDevices>({audio:[], video:[]})
+  const [selectedVideoId, setSelectedVideoId] = useState<string>('')
+  const [selectedAudioId, setSelectedAudioId] = useState<string>('')
+
   useEffect(()=>{
     navigator.mediaDevices.enumerateDevices()
       .then((devices=>{
-        return setInputDevices({audio: devices.filter(({kind})=>(kind==='audioinput')), video: devices.filter(({kind})=>(kind==='videoinput'))})
+        const audio = devices.filter(({kind})=>(kind==='audioinput'))
+        const video = devices.filter(({kind})=>(kind==='audioinput'))
+        setSelectedVideoId(audio?.[0]?.deviceId)
+        setSelectedAudioId(video?.[0]?.deviceId)
+        return setInputDevices({audio , video })
       }))
       .catch((err) => {
         console.error(`${err.name}: ${err.message}`);
       });
   },[])
 
-  const getVideoStream = (deviceId: string) => {
-    return navigator.mediaDevices.getUserMedia({
-      video: {
-        width: {
-          min: 1280,
-          ideal: 1920,
-          max: 2560,
-        },
-        height: {
-          min: 720,
-          ideal: 1080,
-          max: 1440
-        },
-        deviceId: {
-          exact: deviceId
-        }
-      },
-    })
-  }
-
-  const getAudioStream = (deviceId: string) => {
-    return navigator.mediaDevices.getUserMedia({
-      audio: {
-        deviceId: {
-          exact: deviceId
-        }
-      },
-    })
-  }
-
   return {
     inputDevices,
-    getVideoStream,
-    getAudioStream, 
+    selectedVideoId,
+    selectedAudioId,
+    onAudioSelected: setSelectedVideoId,
+    onVideoSelected: setSelectedAudioId,
   }
 }
