@@ -5,4 +5,5 @@ export const ContentContainer = styled.div`
   padding: 12px 20px;
   max-width: 1268px;
   margin: auto;
+  position: relative;
 `;

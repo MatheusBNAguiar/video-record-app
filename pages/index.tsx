@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -8,6 +9,21 @@ import { DeviceSelector } from '../modules/VideoRecorder/components/DeviceSelect
 import { getSharedScreenStream, getVideoStream } from '../modules/VideoRecorder/helpers/MediaDevices.helpers';
 import { useInputDevices } from '../modules/VideoRecorder/hooks/useInputDevices';
 import styles from '../styles/Home.module.css';
+
+const VideoContainer = styled.div`
+  position: relative;
+`;
+
+const MainVideo = styled.video`
+  width: 100%;
+`;
+
+const SecondaryVideo = styled.video`
+  width: 20%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+`;
 
 export default function Home() {
   const { inputDevices, onAudioSelected, onVideoSelected } = useInputDevices();
@@ -45,8 +61,10 @@ export default function Home() {
           onAudioSelected={onAudioSelected}
           onVideoSelected={onVideoSelected}
         />
-        <video autoPlay ref={videoRef}></video>
-        <video autoPlay ref={secondaryVideoRef}></video>
+        <VideoContainer>
+          <MainVideo autoPlay ref={videoRef}></MainVideo>
+          <SecondaryVideo autoPlay ref={secondaryVideoRef}></SecondaryVideo>
+        </VideoContainer>
         <div>
           <Button>Record</Button>
           <Button>Stop</Button>
